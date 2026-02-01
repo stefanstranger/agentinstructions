@@ -1,128 +1,47 @@
 ---
 name: python-project-setup
-description: Sets up a new Python project with uv, virtual environment, and best practices for Windows 11. Use this when creating a new Python project or helping users set up their Python development environment with modern tooling.
+description: Sets up a new Python project with uv, virtual environment, and best practices for Windows 11. Triggers on "create Python project", "set up Python environment", "new Python app", "initialize Python repo", or questions about uv, pyproject.toml, virtual environments on Windows.
+license: MIT - see LICENSE.txt
 ---
 
-## Python Project Setup with uv for Windows 11
+# Python Project Setup with uv
 
-When setting up a new Python project, use `uv` for fast, reliable package management. This skill includes helper scripts in the `scripts/` directory.
+## Quick Setup (Recommended)
 
-### 1. Check and Install uv
-Use the provided script to check if uv is installed:
 ```powershell
-# Check if uv is installed, install if missing
-python scripts/check_uv.py
+.\scripts\setup_project.ps1 -ProjectName "my-project"
 ```
 
-Or manually:
-```powershell
-# Install uv using pip
-pip install uv
-```
+This creates a complete project with virtual environment, pyproject.toml, .gitignore, and README.
 
-### 2. Quick Setup with Script
-For a complete automated setup:
-```powershell
-# Run the setup script with project name
-.\scripts\setup_project.ps1 -ProjectName "my-new-project"
-```
+## Scripts Reference
 
-### 3. Manual Setup Steps
+| Script | Purpose | Usage |
+|--------|---------|-------|
+| `setup_project.ps1` | Full automated setup | `.\scripts\setup_project.ps1 -ProjectName "name"` |
+| `check_uv.py` | Install uv if missing | `python scripts/check_uv.py` |
+| `create_pyproject.py` | Generate pyproject.toml | `python scripts/create_pyproject.py --name "name"` |
 
-#### Create Virtual Environment with uv
-```powershell
-# uv creates and manages virtual environments automatically
-uv venv
-```
+## Manual Setup
 
-#### Activate Virtual Environment
-```powershell
-# PowerShell activation
-.\.venv\Scripts\Activate.ps1
-```
+For step-by-step instructions, see `references/manual-setup.md`.
 
-If you get an execution policy error, run:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
+## Output Structure
 
-#### Create pyproject.toml
-Use the template script or create manually:
-```powershell
-# Generate pyproject.toml from template
-python scripts/create_pyproject.py --name "your-project-name" --python-version "3.10"
-```
-
-Or manually create with this structure:
-```toml
-[project]
-name = "your-project-name"
-version = "0.1.0"
-requires-python = ">=3.10"
-dependencies = []
-
-[project.optional-dependencies]
-dev = [
-    "pytest>=7.0.0",
-    "black>=23.0.0",
-    "ruff>=0.1.0",
-]
-```
-
-#### Install Dependencies with uv
-```powershell
-# Install project dependencies (much faster than pip)
-uv pip install -e ".[dev]"
-```
-
-### 4. Project Structure
-The scripts will create this structure:
 ```
 project-name/
-├── .venv/          # Virtual environment (don't commit)
-├── src/            # Source code
-│   └── __init__.py
-├── tests/          # Test files
-│   └── __init__.py
-├── .gitignore      # Includes .venv, __pycache__, *.pyc
-├── README.md       # Project documentation
-└── pyproject.toml  # Modern Python project file
+├── .venv/
+├── src/__init__.py
+├── tests/__init__.py
+├── .gitignore
+├── README.md
+└── pyproject.toml
 ```
 
-### 5. .gitignore Configuration
-Always exclude:
+## Next Steps After Setup
+
+```powershell
+cd my-project
+.\.venv\Scripts\Activate.ps1
+uv pip install -e ".[dev]"
 ```
-.venv/
-__pycache__/
-*.pyc
-*.pyo
-.pytest_cache/
-.ruff_cache/
-dist/
-build/
-*.egg-info/
-```
-
-## Helper Scripts Reference
-
-### scripts/check_uv.py
-Checks if uv is installed and installs it if missing.
-
-### scripts/setup_project.ps1
-Complete project setup automation:
-- Creates project directory structure
-- Initializes virtual environment with uv
-- Generates pyproject.toml
-- Creates .gitignore
-- Sets up basic README.md
-
-### scripts/create_pyproject.py
-Generates a pyproject.toml file with common configurations.
-
-## Why This Matters
-- `uv` is 10-100x faster than pip for package installation
-- Uses modern `pyproject.toml` instead of legacy `requirements.txt`
-- Helper scripts automate repetitive setup tasks
-- Ensures consistent setup across all team members
-- Prevents common Windows-specific Python issues
-- Follows best practices automatically
